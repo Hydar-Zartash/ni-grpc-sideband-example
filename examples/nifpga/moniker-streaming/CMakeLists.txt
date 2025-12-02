@@ -70,7 +70,7 @@ find_library(NI_SIDEBAND_LIB
 
 
 add_executable(MonikerStreamingClient
-    " stream-read-write-using-sideband-streaming.cpp"
+    "stream-read-write-using-sideband-streaming.cpp"
     "${CMAKE_CURRENT_BINARY_DIR}/nifpga.pb.cc"
     "${CMAKE_CURRENT_BINARY_DIR}/nifpga.pb.h"
     "${CMAKE_CURRENT_BINARY_DIR}/nifpga.grpc.pb.cc"

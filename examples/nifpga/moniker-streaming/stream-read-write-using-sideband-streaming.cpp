@@ -108,9 +108,6 @@ void print_array(const MonikerReadU32Response& data)
 
 ::nidevice_grpc::Session create_and_configure_fpga_task(NiFpga::Stub &client, const std::string &FPGA_RESOURCE, const std::string &fpga_bitfile_path)
 {
-
-    
-  
     
     ::grpc::ClientContext fpga_open_context;
     auto fpga_open_request = OpenRequest{};
