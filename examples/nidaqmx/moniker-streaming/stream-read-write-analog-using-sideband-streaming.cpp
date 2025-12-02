@@ -37,6 +37,7 @@
 
 #include <iostream>
 #include <sstream>
+#include <chrono>
 #include <grpcpp/grpcpp.h>
 #include <sideband_grpc.h>
 
@@ -52,10 +53,10 @@ std::string SERVER_ADDRESS = "localhost";
 std::string SERVER_PORT = "31763";
 std::string PHYSICAL_CHANNEL_READ = "Dev1/ai0:7";
 std::string PHYSICAL_CHANNEL_WRITE = "Dev1/ao0:7";
-std::string READ_DEVICE = "Dev1";
-std::string WRITE_DEVICE = "Dev1";
-int NUM_CHANNELS = 1;
-int NUM_ITERATIONS = 5;
+std::string READ_DEVICE = "PXI1Slot6";
+std::string WRITE_DEVICE = "PXI1Slot6";
+int NUM_CHANNELS = 4;
+int NUM_ITERATIONS = 10000;
 
 class grpc_driver_error : public std::runtime_error {
  private:
@@ -328,6 +329,7 @@ int main(int argc, char **argv)
     
 
     // Read data and write data
+    auto start_time = std::chrono::high_resolution_clock::now();
     for (int i = 0; i < NUM_ITERATIONS; i++) {
       ni::data_monikers::MonikerReadResponse read_data_result;
       nidaqmx_grpc::MonikerWriteAnalogF64Request write_values_array_f64;
@@ -351,6 +353,10 @@ int main(int argc, char **argv)
       print_array(read_analog_f64_response);
       
       }
+    auto end_time = std::chrono::high_resolution_clock::now();
+    auto duration = std::chrono::duration_cast<std::chrono::milliseconds>(end_time - start_time);
+    std::cout << "\nLoop execution time: " << duration.count() << " ms" << std::endl;
+    std::cout << "Average time per iteration: " << (duration.count() / static_cast<double>(NUM_ITERATIONS)) << " ms" << std::endl;
 
     ni::data_monikers::SidebandWriteRequest cancel_request;
     cancel_request.set_cancel(true);
